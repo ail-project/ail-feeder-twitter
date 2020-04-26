@@ -2,6 +2,21 @@
 
 This AIL feeder is a generic software to extract specific urls from Twitter, collect and feed AIL via ZMQ.
 
+# Usage
+
+~~~shell
+adulau@dobbertin:~/git/ail-feeder-twitter/bin$ python3 feeder.py --help
+usage: feeder.py [-h] [--verbose] [--nocache] query
+
+positional arguments:
+  query       query to search on Twitter to feed AIL
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --verbose   verbose output
+  --nocache   disable cache
+~~~
+
 # JSON output format to AIL
 
 ~~~~json
