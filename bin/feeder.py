@@ -29,6 +29,7 @@ config.read('../etc/ail-feeder-twitter.cfg')
 
 if 'general' in config:
     uuid = config['general']['uuid']
+    tweet_limit = config['general']['tweet_limit']
 else:
     uuid = "aae656ec-ffff-4a21-acf0-c88d4e09d506"
 
@@ -48,11 +49,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument("query", help="query to search on Twitter to feed AIL")
 parser.add_argument("--verbose", help="verbose output", action="store_true")
 parser.add_argument("--nocache", help="disable cache", action="store_true")
+parser.add_argument("--tweetlimit", help="maximum number of tweet to fetch", type=int, default=tweet_limit)
 args = parser.parse_args()
 
 c = twint.Config()
 c.Search = args.query
-c.Limit = 1
+c.Limit = args.tweetlimit
 c.Store_object = True
 c.Hide_output = True
 
@@ -100,6 +102,14 @@ for tweet in tweets:
         if args.verbose:
             print("Downloading and parsing {}".format(surl), file=sys.stderr)
         article = newspaper.Article(surl)
+        if r.exists("cu:{}".format(base64.b64encode(surl.encode()))):
+            print("URL {} already processed".format(surl), file=sys.stderr)
+            if not args.nocache:
+               continue
+        else:
+            r.set("cu:{}".format(base64.b64encode(surl.encode())), tweet.tweet)
+            r.expire("cu:{}".format(base64.b64encode(surl.encode())), cache_expire)
+
         try:
             article.download()
             article.parse()
