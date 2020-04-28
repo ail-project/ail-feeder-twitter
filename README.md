@@ -60,7 +60,7 @@ optional arguments:
         ],
         "twitter:user_id": 79207749
     },
-    "source": "ail-feeder-twitter",
+    "source": "ail_feeder_twitter",
     "source-uuid": "aae656ec-d446-4a21-acf0-c88d4e09d506"
 }
 
@@ -71,4 +71,3 @@ optional arguments:
  - `data` is the base64 encoded value of the gziped data
  - `data-sha256` is the SHA256 value of the uncompress data
  - `meta` is the generic field where feeder can add the metadata collected
-
