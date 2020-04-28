@@ -20,7 +20,7 @@ def jsonclean(o):
         return o.__str__()
 
 uuid = "aae656ec-d446-4a21-acf0-c88d4e09d506"
-ailfeedertype = "ail-feeder-twitter"
+ailfeedertype = "ail_feeder_twitter"
 
 # config reader
 
@@ -129,4 +129,3 @@ for tweet in tweets:
         output['meta']['newspaper:top_image'] = article.top_image
         output['meta']['newspaper:movies'] = article.movies
         print(json.dumps(output, indent=4, sort_keys=True, default=jsonclean))
-
