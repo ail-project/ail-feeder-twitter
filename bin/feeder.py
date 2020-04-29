@@ -7,7 +7,7 @@ import newspaper
 import validators
 import hashlib
 import base64
-import zlib
+import gzip
 import simplejson as json
 import redis
 import sys
@@ -21,7 +21,7 @@ def jsonclean(o):
 
 uuid = "aae656ec-d446-4a21-acf0-c88d4e09d506"
 ailfeedertype = "ail_feeder_twitter"
-
+ailurlextract = "ail_feeder_urlextract"
 # config reader
 
 config = configparser.ConfigParser()
@@ -72,29 +72,42 @@ for tweet in tweets:
     else:
         r.set("c:{}".format(tweet.id), tweet.tweet)
         r.expire("c:{}".format(tweet.id), cache_expire)
+
+    output_tweet = {}
+    output_tweet['source'] = ailfeedertype
+    output_tweet['source-uuid'] = uuid
+    output_tweet['default-encoding'] = 'UTF-8'
+    output_tweet['meta'] = {}
+    output_tweet['meta']['twitter:tweet_id'] = tweet.id
+    output_tweet['meta']['twitter:user_id'] = tweet.user_id
+    output_tweet['meta']['twitter:id'] = tweet.username
+    output_tweet['meta']['twitter:name'] = tweet.name
+    output_tweet['meta']['twitter:link'] = tweet.link
+    output_tweet['meta']['twitter:place'] = tweet.place
+    output_tweet['meta']['twitter:geo'] = tweet.geo
+    output_tweet['meta']['twitter:near'] = tweet.near
+    output_tweet['meta']['twitter:urls'] = tweet.urls
+    output_tweet['meta']['twitter:replies_count'] = tweet.replies_count
+    output_tweet['meta']['twitter:retweets_count'] = tweet.retweets_count
+    output_tweet['meta']['twitter:likes_count'] = tweet.likes_count
+    output_tweet['meta']['twitter:source'] = tweet.source
+    output_tweet['meta']['twitter:datestamp'] = tweet.datestamp
+    output_tweet['meta']['twitter:timestamp'] = tweet.timestamp
+    output_tweet['meta']['twitter:timezone'] = tweet.timezone
+
+    m = hashlib.sha256()
+    m.update(tweet.tweet.encode('utf-8'))
+    output_tweet['data-sha256'] = m.hexdigest()
+    output_tweet['data'] = base64.b64encode(gzip.compress(tweet.tweet.encode()))
+    print(json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean))
+
     for url in urls:
         output = {}
-        output['source'] = ailfeedertype
+        output['source'] = ailurlextract
         output['source-uuid'] = uuid
         output['default-encoding'] = 'UTF-8'
         output['meta'] = {}
-        output['meta']['twitter:tweet_id'] = tweet.id
-        output['meta']['twitter:user_id'] = tweet.user_id
-        output['meta']['twitter:id'] = tweet.username
-        output['meta']['twitter:tweet'] = tweet.tweet
-        output['meta']['twitter:name'] = tweet.name
-        output['meta']['twitter:link'] = tweet.link
-        output['meta']['twitter:place'] = tweet.place
-        output['meta']['twitter:geo'] = tweet.geo
-        output['meta']['twitter:near'] = tweet.near
-        output['meta']['twitter:urls'] = tweet.urls
-        output['meta']['twitter:replies_count'] = tweet.replies_count
-        output['meta']['twitter:retweets_count'] = tweet.retweets_count
-        output['meta']['twitter:likes_count'] = tweet.likes_count
-        output['meta']['twitter:source'] = tweet.source
-        output['meta']['twitter:datestamp'] = tweet.datestamp
-        output['meta']['twitter:timestamp'] = tweet.timestamp
-        output['meta']['twitter:timezone'] = tweet.timezone
+        output['meta']['parent:twitter:tweet_id'] = tweet.id
         surl = url.split()[0]
         output['meta']['twitter:url-extracted'] = surl
         if not validators.url(surl):
@@ -120,7 +133,7 @@ for tweet in tweets:
         m = hashlib.sha256()
         m.update(article.html.encode('utf-8'))
         output['data-sha256'] = m.hexdigest()
-        output['data'] = base64.b64encode(zlib.compress(article.html.encode()))
+        output['data'] = base64.b64encode(gzip.compress(article.html.encode()))
         output['meta']['newspaper:text'] = article.text
         output['meta']['newspaper:authors'] = article.authors
         article.nlp()
