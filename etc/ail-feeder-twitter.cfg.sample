@@ -1,0 +1,15 @@
+[general]
+uuid = aae656ec-d446-4a21-acf0-c88d4e09d506
+tweet_limit = 50
+
+[ail]
+url = https://127.0.0.1:7020/api/v1/import/json/item
+apikey = <YOURAPIKEY> 
+
+[cache]
+expire = 86400
+
+[redis]
+host = 127.0.0.1
+port = 6379
+db = 0
