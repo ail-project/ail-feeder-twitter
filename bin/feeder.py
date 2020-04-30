@@ -14,6 +14,7 @@ import sys
 import datetime
 import configparser
 import argparse
+import requests
 
 def jsonclean(o):
     if isinstance(o, datetime.datetime):
@@ -42,6 +43,11 @@ if 'cache' in config:
     cache_expire = config['cache']['expire']
 else:
     cache_expire = 86400
+
+def ail_publish(url=config['ail']['url'], apikey=config['ail']['apikey'], data=None):
+    response = requests.post(url, headers={'Content-Type': 'application/json', 'Authorization': apikey} ,data=data, verify=False)
+    return response
+
 
 # arguments parsing
 
@@ -100,6 +106,7 @@ for tweet in tweets:
     output_tweet['data-sha256'] = m.hexdigest()
     output_tweet['data'] = base64.b64encode(gzip.compress(tweet.tweet.encode()))
     print(json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean))
+    ail_publish(data=json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean))
 
     for url in urls:
         output = {}
@@ -142,3 +149,4 @@ for tweet in tweets:
         output['meta']['newspaper:top_image'] = article.top_image
         output['meta']['newspaper:movies'] = article.movies
         print(json.dumps(output, indent=4, sort_keys=True, default=jsonclean))
+        ail_publish(data=json.dumps(output, indent=4, sort_keys=True, default=jsonclean))
