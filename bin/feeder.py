@@ -143,7 +143,12 @@ for tweet in tweets:
         output['data'] = base64.b64encode(gzip.compress(article.html.encode()))
         output['meta']['newspaper:text'] = article.text
         output['meta']['newspaper:authors'] = article.authors
-        article.nlp()
+        try:
+            article.nlp()
+        except:
+            if args.verbose:
+                print("Unable to nlp {}".format(surl), file=sys.stderr)
+            continue
         output['meta']['newspaper:keywords'] = article.keywords
         output['meta']['newspaper:publish_date'] = article.publish_date
         output['meta']['newspaper:top_image'] = article.top_image
