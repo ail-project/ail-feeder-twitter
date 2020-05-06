@@ -1,0 +1,5 @@
+newspaper3k
+redis
+twint
+urlextract
+validators
