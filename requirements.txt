@@ -3,3 +3,4 @@ redis
 twint
 urlextract
 validators
+simplejson
