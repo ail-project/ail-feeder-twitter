@@ -27,6 +27,10 @@ optional arguments:
 - `data-sha256` is the SHA256 value of the uncompress data
 - `meta` is the generic field where feeder can add the metadata collected
 
+# (main) Requirements
+
+- twint (recommended to use [ail-project twint repository](https://github.com/ail-project/twint)) 
+- [newspaper](https://newspaper.readthedocs.io/en/latest/)
 
 ## ail_feeder_twitter
 
