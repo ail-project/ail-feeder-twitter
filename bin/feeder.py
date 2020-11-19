@@ -15,6 +15,7 @@ import datetime
 import configparser
 import argparse
 import requests
+from urllib.parse import urlparse
 
 def jsonclean(o):
     if isinstance(o, datetime.datetime):
@@ -118,6 +119,9 @@ for tweet in tweets:
         output['meta']['parent:twitter:tweet_id'] = tweet.id
         surl = url.split()[0]
         output['meta']['twitter:url-extracted'] = surl
+        u = urlparse(surl)
+        if "twitter.com" in u.hostname:
+            continue
         if not validators.url(surl):
             continue
         if args.verbose:
