@@ -63,6 +63,7 @@ c.Search = args.query
 c.Limit = args.tweetlimit
 c.Store_object = True
 c.Hide_output = True
+c.Filter_retweets = True
 
 twint.run.Search(c)
 tweets = twint.output.tweets_list
