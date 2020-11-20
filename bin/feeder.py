@@ -16,6 +16,7 @@ import configparser
 import argparse
 import requests
 from urllib.parse import urlparse
+import signal
 
 def jsonclean(o):
     if isinstance(o, datetime.datetime):
@@ -126,7 +127,15 @@ for tweet in tweets:
             continue
         if args.verbose:
             print("Downloading and parsing {}".format(surl), file=sys.stderr)
-        article = newspaper.Article(surl)
+        signal.alarm(10)
+        try:
+            article = newspaper.Article(surl)
+        except TimeoutException:
+            print("Timeout reached for {}".format(surl), file=sys.stderr)
+            continue
+        else:
+            signal.alarm(0)
+
         if r.exists("cu:{}".format(base64.b64encode(surl.encode()))):
             print("URL {} already processed".format(surl), file=sys.stderr)
             if not args.nocache:
