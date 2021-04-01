@@ -121,8 +121,9 @@ for tweet in tweets:
         surl = url.split()[0]
         output['meta']['twitter:url-extracted'] = surl
         u = urlparse(surl)
-        if "twitter.com" in u.hostname:
-            continue
+        if u.hostname is not None:
+            if "twitter.com" in u.hostname:
+                continue
         if not validators.url(surl):
             continue
         if args.verbose:
