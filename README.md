@@ -1,6 +1,6 @@
 # AIL - feeder from Twitter
 
-This AIL feeder is a generic software to extract specific urls from Twitter, collect and feed AIL via ZMQ.
+This AIL feeder is a generic software to extract specific urls from Twitter, collect and feed AIL via AIL ReST API.
 
 # Usage
 
