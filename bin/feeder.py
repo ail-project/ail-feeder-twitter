@@ -67,7 +67,15 @@ c.Store_object = True
 c.Hide_output = True
 c.Filter_retweets = True
 
-twint.run.Search(c)
+signal.alarm(10)
+try:
+    twint.run.Search(c)
+except TimeoutException:
+    print("Timeout reached for search: {}".format(c), file=sys.stderr)
+    sys.exit(1)
+else:
+    signal.alarm(0)
+
 tweets = twint.output.tweets_list
 
 extractor = URLExtract()
