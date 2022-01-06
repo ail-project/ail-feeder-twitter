@@ -1,6 +1,6 @@
 newspaper3k
 redis
-twint
+git+https://github.com/ail-project/twint.git
 urlextract
 validators
 simplejson
