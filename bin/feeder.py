@@ -156,7 +156,7 @@ for tweet in tweets:
         try:
             article.download()
             article.parse()
-        except TimeoutException:
+        except:
             if args.verbose:
                 print("Unable to download/parse {}".format(surl), file=sys.stderr)
             continue
