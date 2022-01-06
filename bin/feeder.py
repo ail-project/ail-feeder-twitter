@@ -156,10 +156,12 @@ for tweet in tweets:
         try:
             article.download()
             article.parse()
-        except:
+        except TimeoutException:
             if args.verbose:
                 print("Unable to download/parse {}".format(surl), file=sys.stderr)
             continue
+        else:
+            signal.alarm(0)
         m = hashlib.sha256()
         m.update(article.html.encode('utf-8'))
         output['data-sha256'] = m.hexdigest()
