@@ -5,8 +5,7 @@ This AIL feeder is a generic software to extract specific urls from Twitter, col
 # Usage
 
 ~~~shell
-adulau@dobbertin:~/git/ail-feeder-twitter/bin$ python3 feeder.py --help
-usage: feeder.py [-h] [--verbose] [--nocache] [--tweetlimit TWEETLIMIT] query
+usage: feeder.py [-h] [--verbose] [--nocache] [--tweetlimit TWEETLIMIT] [--disable-push] query
 
 positional arguments:
   query                 query to search on Twitter to feed AIL
@@ -17,6 +16,7 @@ optional arguments:
   --nocache             disable cache
   --tweetlimit TWEETLIMIT
                         maximum number of tweet to fetch
+  --disable-push        disable AIL API push
 ~~~
 
 # JSON output format to AIL
