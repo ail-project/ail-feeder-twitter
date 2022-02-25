@@ -58,6 +58,8 @@ parser.add_argument("query", help="query to search on Twitter to feed AIL")
 parser.add_argument("--verbose", help="verbose output", action="store_true")
 parser.add_argument("--nocache", help="disable cache", action="store_true")
 parser.add_argument("--tweetlimit", help="maximum number of tweet to fetch", type=int, default=tweet_limit)
+parser.add_argument("--disable-push", help="disable AIL API push", action="store_true")
+
 args = parser.parse_args()
 
 c = twint.Config()
@@ -117,7 +119,8 @@ for tweet in tweets:
     output_tweet['data-sha256'] = m.hexdigest()
     output_tweet['data'] = base64.b64encode(gzip.compress(tweet.tweet.encode()))
     print(json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean))
-    ail_publish(data=json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean))
+    if not args.disable_push:
+        ail_publish(data=json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean))
 
     for url in urls:
         output = {}
@@ -179,4 +182,5 @@ for tweet in tweets:
         output['meta']['newspaper:top_image'] = article.top_image
         output['meta']['newspaper:movies'] = article.movies
         print(json.dumps(output, indent=4, sort_keys=True, default=jsonclean))
-        ail_publish(data=json.dumps(output, indent=4, sort_keys=True, default=jsonclean))
+        if not args.disable_push:
+           ail_publish(data=json.dumps(output, indent=4, sort_keys=True, default=jsonclean))
