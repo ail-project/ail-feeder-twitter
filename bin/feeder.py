@@ -18,9 +18,11 @@ import requests
 from urllib.parse import urlparse
 import signal
 
+
 def jsonclean(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
+
 
 uuid = "aae656ec-d446-4a21-acf0-c88d4e09d506"
 ailfeedertype = "ail_feeder_twitter"
@@ -37,7 +39,11 @@ else:
     uuid = "aae656ec-ffff-4a21-acf0-c88d4e09d506"
 
 if 'redis' in config:
-    r = redis.Redis(host=config['redis']['host'], port=config['redis']['port'], db=config['redis']['db'])
+    r = redis.Redis(
+        host=config['redis']['host'],
+        port=config['redis']['port'],
+        db=config['redis']['db'],
+    )
 else:
     r = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -46,8 +52,14 @@ if 'cache' in config:
 else:
     cache_expire = 86400
 
+
 def ail_publish(url=config['ail']['url'], apikey=config['ail']['apikey'], data=None):
-    response = requests.post(url, headers={'Content-Type': 'application/json', 'Authorization': apikey} ,data=data, verify=False)
+    response = requests.post(
+        url,
+        headers={'Content-Type': 'application/json', 'Authorization': apikey},
+        data=data,
+        verify=False,
+    )
     return response
 
 
@@ -57,7 +69,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument("query", help="query to search on Twitter to feed AIL")
 parser.add_argument("--verbose", help="verbose output", action="store_true")
 parser.add_argument("--nocache", help="disable cache", action="store_true")
-parser.add_argument("--tweetlimit", help="maximum number of tweet to fetch", type=int, default=tweet_limit)
+parser.add_argument(
+    "--tweetlimit",
+    help="maximum number of tweet to fetch",
+    type=int,
+    default=tweet_limit,
+)
 parser.add_argument("--disable-push", help="disable AIL API push", action="store_true")
 
 args = parser.parse_args()
@@ -120,7 +137,9 @@ for tweet in tweets:
     output_tweet['data'] = base64.b64encode(gzip.compress(tweet.tweet.encode()))
     print(json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean))
     if not args.disable_push:
-        ail_publish(data=json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean))
+        ail_publish(
+            data=json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean)
+        )
 
     for url in urls:
         output = {}
@@ -151,7 +170,7 @@ for tweet in tweets:
         if r.exists("cu:{}".format(base64.b64encode(surl.encode()))):
             print("URL {} already processed".format(surl), file=sys.stderr)
             if not args.nocache:
-               continue
+                continue
         else:
             r.set("cu:{}".format(base64.b64encode(surl.encode())), tweet.tweet)
             r.expire("cu:{}".format(base64.b64encode(surl.encode())), cache_expire)
@@ -183,4 +202,6 @@ for tweet in tweets:
         output['meta']['newspaper:movies'] = article.movies
         print(json.dumps(output, indent=4, sort_keys=True, default=jsonclean))
         if not args.disable_push:
-           ail_publish(data=json.dumps(output, indent=4, sort_keys=True, default=jsonclean))
+            ail_publish(
+                data=json.dumps(output, indent=4, sort_keys=True, default=jsonclean)
+            )
