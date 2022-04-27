@@ -114,8 +114,75 @@ optional arguments:
 
 ~~~~shell
 python3 feeder.py --nocache --export-misp --disable-push @misp_project  
-[!] No more data! Scraping will stop now.
-found 0 deleted tweets in this search.
-{"Object": [{"name": "twitter-post", "meta-category": "misc", "template_uuid": "d1214031-ce1b-4a35-bd33-644c707bda2e", "description": "Twitter post (tweet).", "template_version": "5", "uuid": "3ea2d035-b089-4723-bcdc-d4d06e535c71", "Attribute": [{"uuid": "d29164ac-8215-4f30-b9a4-b541c4544842", "object_relation": "post-id", "value": "1260239521381318657", "type": "text", "disable_correlation": false, "to_ids": false, "category": "Other"}, {"uuid": "e6bbdb38-e89d-471e-8448-3c98da6e9c65", "object_relation": "name", "value": "thehive_project", "type": "text", "disable_correlation": false, "to_ids": false, "category": "Other"}, {"uuid": "b555d3fa-9700-46ae-8424-657c96cd0358", "object_relation": "post", "value": "Er... bug spotted... in the previous tweet  s/@MISP_Project/@MISPProject  https://t.co/cc396XW9Id", "type": "text", "disable_correlation": false, "to_ids": false, "category": "Other"}, {"uuid": "5ad5648a-f566-4d7c-93af-3ac9b171513e", "object_relation": "link", "value": "https://twitter.com/TheHive_Project/status/1260239521381318657", "type": "text", "disable_correlation": false, "to_ids": false, "category": "Other"}, {"uuid": "27f43b4b-149f-44ad-bd3c-901d6b2b6fa6", "object_relation": "post-id", "value": "1260239521381318657", "type": "text", "disable_correlation": false, "to_ids": false, "category": "Other"}], "distribution": "5", "sharing_group_id": "0", "first_seen": "2020-05-12T00:00:00+02:00"}]}
-{"Object": [{"name": "twitter-post", "meta-category": "misc", "template_uuid": "d1214031-ce1b-4a35-bd33-644c707bda2e", "description": "Twitter post (tweet).", "template_version": "5", "uuid": "7882ccdd-cd95-4549-adfe-f092cfb2c164", "Attribute": [{"uuid": "88337130-8b3e-4f1f-a66f-6b461d8d6de7", "object_relation": "post-id", "value": "1260237850836111360", "type": "text", "disable_correlation": false, "to_ids": false, "category": "Other"}, {"uuid": "1d189ec2-7855-4728-9fb6-b768ccbce3d5", "object_relation": "name", "value": "thehive_project", "type": "text", "disable_correlation": false, "to_ids": false, "category": "Other"}, {"uuid": "3db1f59a-59a0-4e91-b782-b53db8a0cf39", "object_relation": "post", "value": "Back in April, we released TheHive 3.4.1 &amp;&amp; 3.4.2. They fix numerous bugs and add some nice enhancements (e.g. improved @MISP_Project sync, detailed responder output)  Check'em out &amp; send some bugs and/or love our way while maintaining social distance ;-)   https://t.co/oDCcPzvEP2", "type": "text", "disable_correlation": false, "to_ids": false, "category": "Other"}, {"uuid": "380cb1ae-aa28-4c67-bd8f-4af3683547f3", "object_relation": "link", "value": "https://twitter.com/TheHive_Project/status/1260237850836111360", "type": "text", "disable_correlation": false, "to_ids": false, "category": "Other"}, {"uuid": "1a176f72-8744-4ae9-b86c-f58429ccfd19", "object_relation": "embedded-link", "value": "https://blog.thehive-project.org/2020/05/12/new-thehive-3-4-patch-releases/", "type": "text", "disable_correlation": false, "to_ids": false, "category": "Other"}, {"uuid": "eb07b936-f4f0-4912-bdfb-07db570895f8", "object_relation": "post-id", "value": "1260237850836111360", "type": "text", "disable_correlation": false, "to_ids": false, "category": "Other"}], "distribution": "5", "sharing_group_id": "0", "first_seen": "2020-05-12T00:00:00+02:00"}]}
+{
+  "Object": [
+    {
+      "name": "twitter-post",
+      "meta-category": "misc",
+      "template_uuid": "d1214031-ce1b-4a35-bd33-644c707bda2e",
+      "description": "Twitter post (tweet).",
+      "template_version": "5",
+      "uuid": "c6f4ee16-8962-4f39-961a-65914a8a5a01",
+      "Attribute": [
+        {
+          "uuid": "fdfe1d06-011d-4b4b-b5ef-9b9c46bb9dd1",
+          "object_relation": "post-id",
+          "value": "1065268779570118656",
+          "type": "text",
+          "disable_correlation": false,
+          "to_ids": false,
+          "category": "Other"
+        },
+        {
+          "uuid": "5e879d32-761a-4ecd-8e1d-3b7755f7a322",
+          "object_relation": "name",
+          "value": "certbund",
+          "type": "text",
+          "disable_correlation": false,
+          "to_ids": false,
+          "category": "Other"
+        },
+        {
+          "uuid": "7c778b80-2494-463f-b753-528af57b6e27",
+          "object_relation": "post",
+          "value": "Zwei Tage praktisches MISP-Training &amp; wieder viele neue Nutzer. Für alle Interessierten, die nicht dabei sein konnten, stellt @circl_lu Trainingsmaterial bereit  https://t.co/Cc8zPiugEc Awesome community building @MISP_Project and thanks for all the fish @Iglocska @rafi0t",
+          "type": "text",
+          "disable_correlation": false,
+          "to_ids": false,
+          "category": "Other"
+        },
+        {
+          "uuid": "93fe1f47-0a79-4bb6-af55-d3a175316afa",
+          "object_relation": "link",
+          "value": "https://twitter.com/certbund/status/1065268779570118656",
+          "type": "text",
+          "disable_correlation": false,
+          "to_ids": false,
+          "category": "Other"
+        },
+        {
+          "uuid": "a5cbf96e-3d3d-49ac-9a6d-ae245f471f44",
+          "object_relation": "embedded-link",
+          "value": "https://www.circl.lu/services/misp-training-materials/",
+          "type": "text",
+          "disable_correlation": false,
+          "to_ids": false,
+          "category": "Other"
+        },
+        {
+          "uuid": "db1b5ea2-59fc-4729-95e3-d62686eba7dc",
+          "object_relation": "post-id",
+          "value": "1065268779570118656",
+          "type": "text",
+          "disable_correlation": false,
+          "to_ids": false,
+          "category": "Other"
+        }
+      ],
+      "distribution": "5",
+      "sharing_group_id": "0",
+      "first_seen": "2018-11-21T00:00:00+01:00"
+    }
+  ]
+}
 ~~~~
