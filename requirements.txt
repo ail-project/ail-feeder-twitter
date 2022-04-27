@@ -4,3 +4,4 @@ redis
 urlextract
 validators
 simplejson
+pymisp

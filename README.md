@@ -1,11 +1,13 @@
 # AIL - feeder from Twitter
 
-This AIL feeder is a generic software to extract specific urls from Twitter, collect and feed AIL via AIL ReST API.
+This AIL feeder is a generic software to extract specific tweets along with urls from Twitter, collect and feed AIL via AIL ReST API.
+
+It also support the export in [MISP object](https://www.misp-project.org/objects.html#_twitter_post) format for manual ingestion in [MISP](https://www.misp-project.org/).
 
 # Usage
 
 ~~~shell
-usage: feeder.py [-h] [--verbose] [--nocache] [--tweetlimit TWEETLIMIT] [--disable-push] query
+usage: feeder.py [-h] [--verbose] [--nocache] [--tweetlimit TWEETLIMIT] [--disable-push] [--export-misp] query
 
 positional arguments:
   query                 query to search on Twitter to feed AIL
@@ -17,6 +19,7 @@ optional arguments:
   --tweetlimit TWEETLIMIT
                         maximum number of tweet to fetch
   --disable-push        disable AIL API push
+  --export-misp         Export in MISP object format instead of AIL JSON
 ~~~
 
 # JSON output format to AIL

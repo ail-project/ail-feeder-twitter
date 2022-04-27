@@ -17,7 +17,7 @@ import argparse
 import requests
 from urllib.parse import urlparse
 import signal
-
+from pymisp import MISPObject
 
 def jsonclean(o):
     if isinstance(o, datetime.datetime):
@@ -76,6 +76,7 @@ parser.add_argument(
     default=tweet_limit,
 )
 parser.add_argument("--disable-push", help="disable AIL API push", action="store_true")
+parser.add_argument("--export-misp", help="Export in MISP object format instead of AIL JSON", action="store_true", default=False)
 
 args = parser.parse_args()
 
@@ -102,7 +103,8 @@ extractor = URLExtract()
 for tweet in tweets:
     urls = extractor.find_urls(tweet.tweet)
     if r.exists("c:{}".format(tweet.id)):
-        print("Tweet {} already processed".format(tweet.id), file=sys.stderr)
+        if args.verbose:
+            print("Tweet {} already processed".format(tweet.id), file=sys.stderr)
         if not args.nocache:
             continue
     else:
@@ -135,7 +137,24 @@ for tweet in tweets:
     m.update(tweet.tweet.encode('utf-8'))
     output_tweet['data-sha256'] = m.hexdigest()
     output_tweet['data'] = base64.b64encode(gzip.compress(tweet.tweet.encode()))
-    print(json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean))
+    if not args.export_misp:
+        print(json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean))
+    elif args.export_misp:
+        twitter_object = MISPObject('twitter-post')
+        twitter_object.add_attribute('post-id', **{'type': 'text', 'value': tweet.id})
+        twitter_object.add_attribute('name', **{'type': 'text', 'value': tweet.username})
+        twitter_object.add_attribute('post', **{'type': 'text', 'value': tweet.tweet.encode()})
+        twitter_object.add_attribute('link', **{'type': 'text', 'value': tweet.link})
+        twitter_object.add_attribute('geo', **{'type': 'text', 'value': tweet.geo})
+        for url in tweet.urls:
+            twitter_object.add_attribute('embedded-link', **{'type': 'text', 'value': url})
+        twitter_object.add_attribute('post-id', **{'type': 'text', 'value': tweet.id})
+        setattr(twitter_object, 'first_seen', tweet.datestamp)
+        t = json.loads(twitter_object.to_json())
+        output = {}
+        output['Object'] = []
+        output['Object'].append(t)
+        print(json.dumps(output))
     if not args.disable_push:
         ail_publish(
             data=json.dumps(output_tweet, indent=4, sort_keys=True, default=jsonclean)
@@ -168,7 +187,8 @@ for tweet in tweets:
             signal.alarm(0)
 
         if r.exists("cu:{}".format(base64.b64encode(surl.encode()))):
-            print("URL {} already processed".format(surl), file=sys.stderr)
+            if args.verbose:
+                print("URL {} already processed".format(surl), file=sys.stderr)
             if not args.nocache:
                 continue
         else:
@@ -200,7 +220,9 @@ for tweet in tweets:
         output['meta']['newspaper:publish_date'] = article.publish_date
         output['meta']['newspaper:top_image'] = article.top_image
         output['meta']['newspaper:movies'] = article.movies
-        print(json.dumps(output, indent=4, sort_keys=True, default=jsonclean))
+        # MISP export should be added for the crawled items
+        if not args.export_misp:
+            print(json.dumps(output, indent=4, sort_keys=True, default=jsonclean))
         if not args.disable_push:
             ail_publish(
                 data=json.dumps(output, indent=4, sort_keys=True, default=jsonclean)
