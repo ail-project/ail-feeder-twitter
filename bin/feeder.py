@@ -19,6 +19,7 @@ from urllib.parse import urlparse
 import signal
 from pymisp import MISPObject
 
+
 def jsonclean(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
@@ -76,7 +77,12 @@ parser.add_argument(
     default=tweet_limit,
 )
 parser.add_argument("--disable-push", help="disable AIL API push", action="store_true")
-parser.add_argument("--export-misp", help="Export in MISP object format instead of AIL JSON", action="store_true", default=False)
+parser.add_argument(
+    "--export-misp",
+    help="Export in MISP object format instead of AIL JSON",
+    action="store_true",
+    default=False,
+)
 
 args = parser.parse_args()
 
@@ -142,12 +148,18 @@ for tweet in tweets:
     elif args.export_misp:
         twitter_object = MISPObject('twitter-post')
         twitter_object.add_attribute('post-id', **{'type': 'text', 'value': tweet.id})
-        twitter_object.add_attribute('name', **{'type': 'text', 'value': tweet.username})
-        twitter_object.add_attribute('post', **{'type': 'text', 'value': tweet.tweet.encode()})
+        twitter_object.add_attribute(
+            'name', **{'type': 'text', 'value': tweet.username}
+        )
+        twitter_object.add_attribute(
+            'post', **{'type': 'text', 'value': tweet.tweet.encode()}
+        )
         twitter_object.add_attribute('link', **{'type': 'text', 'value': tweet.link})
         twitter_object.add_attribute('geo', **{'type': 'text', 'value': tweet.geo})
         for url in tweet.urls:
-            twitter_object.add_attribute('embedded-link', **{'type': 'text', 'value': url})
+            twitter_object.add_attribute(
+                'embedded-link', **{'type': 'text', 'value': url}
+            )
         twitter_object.add_attribute('post-id', **{'type': 'text', 'value': tweet.id})
         setattr(twitter_object, 'first_seen', tweet.datestamp)
         t = json.loads(twitter_object.to_json())
@@ -224,6 +236,7 @@ for tweet in tweets:
         if not args.export_misp:
             print(json.dumps(output, indent=4, sort_keys=True, default=jsonclean))
         if not args.disable_push:
-            ail_publish(
+            ail_ret = ail_publish(
                 data=json.dumps(output, indent=4, sort_keys=True, default=jsonclean)
             )
+            print(f"AIL publish HTTP return code {ail_ret.status_code}")
